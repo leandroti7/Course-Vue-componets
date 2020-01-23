@@ -1,0 +1,28 @@
+{
+  "name": "vue_components",
+  "version": "1.0.0",
+  "description": "Course of Vue.js-1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leandroti7/Course_vue.git"
+  },
+  "author": "Leandro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leandroti7/Course_vue/issues"
+  },
+  "homepage": "https://github.com/leandroti7/Course_vue#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "bootstrap": "^4.4.1",
+    "vue": "^2.6.11",
+    "vue-resource": "^1.5.1"
+  },
+  "devDependencies": {
+    "vue-cli": "^2.9.6"
+  }
+}
