@@ -8,3 +8,7 @@
 .row > div > button{
     display: flex;
 }
+.row .time{
+    display: flex;
+    align-items: center;
+}

@@ -9,11 +9,11 @@ Vue.component('titulo',{
     `
 });
 Vue.component('clube',{
-    props:['time'],
+    props:['time','invertido'],
     template:`
-    <div class="row">
-        <img :src="time.escudo" class="img-responsive" alt="">
-        {{ time.nome | maiuscula}}
+    <div class="row time">
+        <img :src="time.escudo" class="img-responsive" :style="{order: invertido == 'true'? 2 : 1}" alt="">
+        <span :style="{order: invertido == 'true'? 1 : 2}">{{ time.nome | maiuscula}}</span>
     </div>
     `
 });
