@@ -58,18 +58,8 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <h3>Times classificados para libertadores</h3>
-            <ul>
-                <li v-for="time in timesLibertadores">
-                    <clube :time='time'></clube>
-                </li>
-            </ul>
-            <h3 class="title">Times classificados para libertadores</h3>
-            <ul>
-                <li v-for="time in timesLibertadores">
-                    <clube :time='time'></clube>
-                </li>
-            </ul> -->
+            <clubes-libertadores :times="times"></clubes-libertadores>
+            <clubes-rebaixados :times="times"></clubes-rebaixados>
         </div>
     </div>
  </div>

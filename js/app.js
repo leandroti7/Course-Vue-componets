@@ -17,6 +17,63 @@ Vue.component('clube',{
     </div>
     `
 });
+//kebab
+Vue.component('clubes-libertadores', {
+    props: ['times'],
+    template: `
+    <div>
+        <h3>Time classificado para libertadores</h3>
+        <ul>
+            <li v-for="time in timesLibertadores">
+                <clube :time="time"></clube>
+            </li>
+        </ul>
+    </div>
+    `,
+    computed: {
+        timesLibertadores() {
+            return this.times.slice(0, 6)
+        }
+    },
+
+});
+
+Vue.component('clubes-libertadores', {
+    props: ['times'],
+    template: `
+    <div>
+        <h3>Time classificado para libertadores</h3>
+        <ul>
+            <li v-for="time in timesLibertadores">
+                <clube :time="time"></clube>
+            </li>
+        </ul>
+    </div>
+    `,
+    computed: {
+        timesLibertadores() {
+            return this.times.slice(0, 6)
+        }
+    },
+
+});
+Vue.component('clubes-rebaixados', {
+    props: ['times'],
+    template: `
+    <div>
+        <h3>Time Rebaixados</h3>
+        <ul>
+            <li v-for="time in timesRebaixados">
+                <clube :time="time"></clube>
+            </li>
+        </ul>
+    </div>
+    `,
+    timesRebaixados() {
+        return this.times.slice(16, 20)
+    },
+
+});
 var app = new Vue({
     el: '#app',
     data: {
