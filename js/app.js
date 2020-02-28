@@ -9,13 +9,70 @@ Vue.component('titulo',{
     `
 });
 Vue.component('clube',{
-    props:['time'],
+    props:['time','invertido'],
     template:`
-    <div class="row">
-        <img :src="time.escudo" class="img-responsive" alt="">
-        {{ time.nome | maiuscula}}
+    <div class="row time">
+        <img :src="time.escudo" class="img-responsive" :style="{order: invertido == 'true'? 2 : 1}" alt="">
+        <span :style="{order: invertido == 'true'? 1 : 2}">{{ time.nome | maiuscula}}</span>
     </div>
     `
+});
+//kebab
+Vue.component('clubes-libertadores', {
+    props: ['times'],
+    template: `
+    <div>
+        <h3>Time classificado para libertadores</h3>
+        <ul>
+            <li v-for="time in timesLibertadores">
+                <clube :time="time"></clube>
+            </li>
+        </ul>
+    </div>
+    `,
+    computed: {
+        timesLibertadores() {
+            return this.times.slice(0, 6)
+        }
+    },
+
+});
+
+Vue.component('clubes-libertadores', {
+    props: ['times'],
+    template: `
+    <div>
+        <h3>Time classificado para libertadores</h3>
+        <ul>
+            <li v-for="time in timesLibertadores">
+                <clube :time="time"></clube>
+            </li>
+        </ul>
+    </div>
+    `,
+    computed: {
+        timesLibertadores() {
+            return this.times.slice(0, 6)
+        }
+    },
+
+});
+Vue.component('clubes-rebaixados', {
+    props: ['times'],
+    template: `
+    <div>
+        <h3>Time Rebaixados</h3>
+        <ul>
+            <li v-for="time in timesRebaixados">
+                <clube :time="time"></clube>
+            </li>
+        </ul>
+    </div>
+    `,
+    timesRebaixados() {
+        return this.times.slice(16, 20)
+    },
+
 });
 var app = new Vue({
     el: '#app',

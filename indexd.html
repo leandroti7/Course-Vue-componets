@@ -25,13 +25,11 @@
     <div class="row">
         <div class="col-md-12" v-if="visao!='tabela'">
             <form class="form-inline">
-                <img :src="novoJogo.casa.time ? novoJogo.casa.time.escudo: ''" class="img-responsive mr-3" alt="">
-                <h3>{{ novoJogo.casa.time ? novoJogo.casa.time.nome: '' }}</h3>
+                <clube :time=" novoJogo.casa.time" invertido="true" v-if="novoJogo.casa.time"></clube>
                 <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="novoJogo.casa.gols">
                 X
                 <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="novoJogo.fora.gols">
-                <img :src="novoJogo.fora.time ? novoJogo.fora.time.escudo: ''" class="img-responsive mr-3" alt="">
-                <h3>{{ novoJogo.fora.time ? novoJogo.fora.time.nome: '' }}</h3>
+                <clube :time=" novoJogo.fora.time"  v-if="novoJogo.fora.time"></clube>
                 <div class="row col-md-12 mt-5 mb-5">
                     <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
                 </div>
@@ -60,18 +58,8 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <h3>Times classificados para libertadores</h3>
-            <ul>
-                <li v-for="time in timesLibertadores">
-                    <clube :time='time'></clube>
-                </li>
-            </ul>
-            <h3 class="title">Times classificados para libertadores</h3>
-            <ul>
-                <li v-for="time in timesLibertadores">
-                    <clube :time='time'></clube>
-                </li>
-            </ul> -->
+            <clubes-libertadores :times="times"></clubes-libertadores>
+            <clubes-rebaixados :times="times"></clubes-rebaixados>
         </div>
     </div>
  </div>
