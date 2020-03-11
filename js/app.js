@@ -38,25 +38,6 @@ Vue.component('clubes-libertadores', {
 
 });
 
-Vue.component('clubes-libertadores', {
-    props: ['times'],
-    template: `
-    <div>
-        <h3>Time classificado para libertadores</h3>
-        <ul>
-            <li v-for="time in timesLibertadores">
-                <clube :time="time"></clube>
-            </li>
-        </ul>
-    </div>
-    `,
-    computed: {
-        timesLibertadores() {
-            return this.times.slice(0, 6)
-        }
-    },
-
-});
 Vue.component('clubes-rebaixados', {
     props: ['times'],
     template: `
@@ -69,20 +50,76 @@ Vue.component('clubes-rebaixados', {
         </ul>
     </div>
     `,
-    timesRebaixados() {
-        return this.times.slice(16, 20)
+    computed: {
+        timesRebaixados() {
+            return this.times.slice(16, 20)
+        },
     },
 
 });
-var app = new Vue({
+
+Vue.component('tabela-brasileiro', {
+    props: ['times'],
+    data(){
+        return {
+            busca: '',
+            ordem: {
+                ordenacao: ['desc', 'desc', 'asc', 'desc'],
+                colunas: ['pontos', 'gm', 'gs', 'saldo']
+            },
+        }  
+    },
+    template: `
+        <div>
+            <input type="text" class="form-control" v-model="busca">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th v-for="(coluna, indice) in ordem.colunas">
+                            <a href="#" @click.prevent="ordenar(indice)">{{ coluna | maiuscula }}</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(time,indice) in timesFiltrados" :class="{ 'table-success': indice < 6}" :style="{ 'font-weight': indice < 6? '900': '400'}">
+                    <td>
+                        <clube :time='time'></clube>
+                    </td>
+                    <td>{{ time.pontos }}</td>
+                    <td>{{ time.gm }}</td>
+                    <td>{{ time.gs }}</td>
+                    <td>{{ time.saldo }}</td>
+                    <!-- <td>{{ time | saldo }}</td> -->
+                </tr>
+                </tbody>
+            </table>
+            <clubes-libertadores :times="timesOrderd"></clubes-libertadores>
+            <clubes-rebaixados :times="timesOrderd"></clubes-rebaixados>
+        </div>
+    `,
+    computed: {
+        timesFiltrados() {
+            let self = this;
+            return _.filter(this.timesOrderd, function (time) {
+                let busca = self.busca.toLowerCase();
+                return time.nome.toLowerCase().indexOf(busca) >= 0;
+            })
+        },
+        timesOrderd() {
+            return _.orderBy(this.times, this.ordem.colunas, this.ordem.ordenacao)
+        }
+    },
+    methods: {
+        ordenar(indice) {
+            this.$set(this.ordem.ordenacao, indice, this.ordem.ordenacao[indice] == 'desc' ? 'asc' : 'desc')
+        }
+    }
+});
+
+new Vue({
     el: '#app',
     data: {
-        gols: '4',
-        busca: '',
-        ordem: {
-            ordenacao: ['desc', 'desc', 'asc', 'desc'],
-            colunas: ['pontos', 'gm', 'gs', 'saldo']
-        },
         times: [
             new Time('américa MG', 'assets/america_mg_60x60.png'),
             new Time('Corinthians', 'assets/corinthians_60x60.png'),
@@ -117,29 +154,7 @@ var app = new Vue({
         },
         visao: 'tabela'
     },
-    computed: {
-        timesLibertadores() {
-            return this.times.slice(0, 6)
-        },
-        timesRebaixados() {
-            return this.times.slice(16, 20)
-        },
-        timesFiltrados() {
-            let times = _.orderBy(this.times, this.ordem.colunas, this.ordem.ordenacao)
-            let self = this;
-            return _.filter(times, function (time) {
-                let busca = self.busca.toLowerCase();
-                return time.nome.toLowerCase().indexOf(busca) >= 0;
-            })
-        }
-    },
     methods: {
-        showAlert() {
-            alert('Fim de jogo')
-        },
-        pegaValor($event) {
-            console.log($event)
-        },
         criarJogo() {
             let iCasa = Math.floor(Math.random() * 20),
                 iFora = Math.floor(Math.random() * 20);
@@ -149,9 +164,6 @@ var app = new Vue({
             this.novoJogo.fora.time = this.times[iFora];
             this.novoJogo.fora.gols = 0;
             this.visao = 'placar';
-        },
-        ordenar(indice) {
-            this.$set(this.ordem.ordenacao, indice, this.ordem.ordenacao[indice] == 'desc' ? 'asc' : 'desc')
         },
         fimJogo() {
             let golsMarcados = parseInt(this.novoJogo.casa.gols);
