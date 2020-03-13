@@ -23,16 +23,7 @@
     </div>
     <div class="row">
         <div class="col-md-12" v-if="visao!='tabela'">
-            <form class="form-inline">
-                <clube :time=" novoJogo.casa.time" invertido="true" v-if="novoJogo.casa.time"></clube>
-                <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="novoJogo.casa.gols">
-                X
-                <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="novoJogo.fora.gols">
-                <clube :time=" novoJogo.fora.time"  v-if="novoJogo.fora.time"></clube>
-                <div class="row col-md-12 mt-5 mb-5">
-                    <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
-                </div>
-            </form>
+            <novo-jogo :time-casa="timeCasa"  :time-fora="timeFora"></novo-jogo>
         </div>
         <div class="col-md-12" v-if="visao=='tabela'">
             <tabela-brasileiro :times="times"></tabela-brasileiro>

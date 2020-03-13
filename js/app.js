@@ -117,6 +117,36 @@ Vue.component('tabela-brasileiro', {
     }
 });
 
+Vue.component('novo-jogo',{
+    props: ['timeCasa', 'timeFora'],
+    data(){
+        return{
+            golsCasa: 0,
+            golsFora: 0
+        }
+    },
+    template:`
+    <form class="form-inline">
+        <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
+        <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
+        X
+        <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
+        <clube :time="timeFora"  v-if="timeFora"></clube>
+        <div class="row col-md-12 mt-5 mb-5">
+            <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
+        </div>
+    </form>
+    `,
+    methods: {
+        fimJogo() {
+            let golsMarcados = parseInt(this.golsCasa);
+            let golSofridos = parseInt(this.golsFora);
+            this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
+            this.visao = 'tabela';
+        }
+    },
+})
+
 new Vue({
     el: '#app',
     data: {
@@ -142,16 +172,8 @@ new Vue({
             new Time('Atletico MG', 'assets/atletico_mg_60x60.png'),
             new Time('Cerará', 'assets/ceara_60x60.png'),
         ],
-        novoJogo: {
-            casa: {
-                time: null,
-                gols: 0
-            },
-            fora: {
-                time: null,
-                gols: 0
-            }
-        },
+        timeCasa: null,
+        timeFora: null,
         visao: 'tabela'
     },
     methods: {
@@ -159,19 +181,9 @@ new Vue({
             let iCasa = Math.floor(Math.random() * 20),
                 iFora = Math.floor(Math.random() * 20);
 
-            this.novoJogo.casa.time = this.times[iCasa];
-            this.novoJogo.casa.gols = 0;
-            this.novoJogo.fora.time = this.times[iFora];
-            this.novoJogo.fora.gols = 0;
+            this.timeCasa = this.times[iCasa];
+            this.timeFora = this.times[iFora];
             this.visao = 'placar';
-        },
-        fimJogo() {
-            let golsMarcados = parseInt(this.novoJogo.casa.gols);
-            let golSofridos = parseInt(this.novoJogo.fora.gols);
-            let timeFora = this.novoJogo.fora.time;
-            let timeCasa = this.novoJogo.casa.time;
-            timeCasa.fimJogo(timeFora, golsMarcados, golSofridos);
-            this.visao = 'tabela';
         }
     },
     filters: {
