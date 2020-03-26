@@ -142,7 +142,8 @@ Vue.component('novo-jogo',{
             let golsMarcados = parseInt(this.golsCasa);
             let golSofridos = parseInt(this.golsFora);
             this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
-            this.visao = 'tabela';
+            // this.visao = 'tabela';
+            this.$emit('fim-jogo');
         }
     },
 })
@@ -184,6 +185,9 @@ new Vue({
             this.timeCasa = this.times[iCasa];
             this.timeFora = this.times[iFora];
             this.visao = 'placar';
+        },
+        showTabela(){
+            this.visao = 'tabela'
         }
     },
     filters: {
