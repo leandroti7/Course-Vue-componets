@@ -15,9 +15,9 @@ Vue.component('my-app', {
         <div class="row">
         </div>
         <div class="row">
-            <div class="col-md-12" v-if="visao!='tabela'">
+            <!-- <div class="col-md-12" v-if="visao!='tabela'">
                 <placar :time-casa="timeCasa"  :time-fora="timeFora" @fim-jogo="showTabela() "></placar>
-            </div>
+            </div> -->
             <div class="col-md-12" v-if="visao=='tabela'">
                 <tabela-brasileiro :times="times"></tabela-brasileiro>
             </div>
@@ -166,17 +166,75 @@ Vue.component('placar',{
             golsFora: 0
         }
     },
+});
+
+Vue.component('novo-jogo', {
     template:`
-    <form class="form-inline">
-        <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
-        <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
-        X
-        <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
-        <clube :time="timeFora"  v-if="timeFora"></clube>
-        <div class="row col-md-12 mt-5 mb-5">
-            <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
+    <div>
+        <button class="btn btn-warning mb-2 " @click="criarJogo" data-toggle="modal" data-target="#exampleModal">Criar Novo Jogo</button>
+        <modal :time-casa="timeCasa" :time-fora="timeFora"></modal>
+    </div>
+    `,
+    data(){
+        return {
+            timeCasa: null,
+            timeFora: null,
+            times: this.timesColecao
+        }
+    },
+    // props:['times'],
+    inject: ['timesColecao'],
+    methods: {
+        criarJogo() {
+            let iCasa = Math.floor(Math.random() * 20),
+                iFora = Math.floor(Math.random() * 20);
+
+            this.timeCasa = this.timesColecao[iCasa];
+            this.timeFora = this.timesColecao[iFora];
+            // this.$emit('novo-jogo', {timeCasa, timeFora});
+        },
+        showTabela(){
+            this.visao = 'tabela'
+        }
+    },
+});
+
+Vue.component('modal',{
+    props: ['timeCasa','timeFora'],
+    data(){
+        return{
+            golsCasa: 0,
+            golsFora: 0
+        }
+    },
+    template:`
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"  role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Novo Jogo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline">
+                    <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
+                    <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
+                    X
+                    <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
+                    <clube :time="timeFora"  v-if="timeFora"></clube>
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row col-md-12 mt-5 mb-5">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="fimJogo">Fim de jogo</button>
+                </div>
+            </div>
+            </div>
         </div>
-    </form>
+    </div>
     `,
     methods: {
         fimJogo() {
@@ -189,28 +247,6 @@ Vue.component('placar',{
     },
 });
 
-Vue.component('novo-jogo', {
-    template:`
-    <div>
-        <button class="btn btn-warning mb-2 " @click="criarJogo">Criar Novo Jogo</button>
-    </div>
-    `,
-    // props:['times'],
-    inject: ['timesColecao'],
-    methods: {
-        criarJogo() {
-            let iCasa = Math.floor(Math.random() * 20),
-                iFora = Math.floor(Math.random() * 20);
-
-             var timeCasa = this.timesColecao[iCasa];
-             var timeFora = this.timesColecao[iFora];
-            this.$emit('novo-jogo', {timeCasa, timeFora});
-        },
-        showTabela(){
-            this.visao = 'tabela'
-        }
-    },
-});
 Vue.component('clube',{
     props:['time','invertido'],
     template:`

@@ -12,3 +12,11 @@
     display: flex;
     align-items: center;
 }
+.form-inline{
+    justify-content: space-evenly;
+}
+
+.modal-footer{
+    flex-wrap: nowrap;
+    justify-content: start;
+}

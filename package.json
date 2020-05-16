@@ -19,6 +19,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
     "bootstrap": "^4.4.1",
+    "jquery-slim": "^3.0.0",
     "vue": "^2.6.11",
     "vue-resource": "^1.5.1"
   },
