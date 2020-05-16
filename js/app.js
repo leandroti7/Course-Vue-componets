@@ -3,7 +3,7 @@ Vue.filter('maiuscula', function(valor){
 });
 Vue.component('my-app', {
     template: `
-    <div class="container" id="app">
+    <div class="container">
         <titulo></titulo>
         <div class="row">
             <div class="row justify-content-center">
@@ -195,12 +195,6 @@ Vue.component('novo-jogo', {
         <button class="btn btn-warning mb-2 " @click="criarJogo">Criar Novo Jogo</button>
     </div>
     `,
-    // data(){
-    //     return{
-    //         timeCasa: null,
-    //         timeFora: null,
-    //     }
-    // }, 
     props:['times'],
     inject: ['timesColecao'],
     methods: {
