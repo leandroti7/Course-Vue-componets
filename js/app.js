@@ -71,14 +71,14 @@ Vue.component('clubes-rebaixados', {
     `,
     computed: {
         timesRebaixados() {
-            return this.$root.times.slice(16, 20)
+            return this.times.slice(16, 20)
         },
     },
 
 });
 
 Vue.component('tabela-brasileiro', {
-    props: ['times'],
+    // props: ['times'],
     inject: ['timesColecao'],
     data(){
         return {
@@ -152,7 +152,7 @@ Vue.component('clubes-libertadores', {
     `,
     computed: {
         timesLibertadores() {
-            return this.$root.times.slice(0, 6)
+            return this.times.slice(0, 6)
         }
     },
 
@@ -195,7 +195,7 @@ Vue.component('novo-jogo', {
         <button class="btn btn-warning mb-2 " @click="criarJogo">Criar Novo Jogo</button>
     </div>
     `,
-    props:['times'],
+    // props:['times'],
     inject: ['timesColecao'],
     methods: {
         criarJogo() {
@@ -248,7 +248,7 @@ new Vue({
             ]
         }
     },
-    template:`<my-app></my-app>`,
+    // template:`<my-app></my-app>`,
     data: {
         /* times: [
             new Time('américa MG', 'assets/america_mg_60x60.png'),
