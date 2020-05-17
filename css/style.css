@@ -16,6 +16,13 @@
     justify-content: space-evenly;
 }
 
+.modal-header > h3{
+    margin: 0 auto;
+}
+.modal-header > .close{
+    margin: 0;
+    padding: 0;
+}
 .modal-footer{
     flex-wrap: nowrap;
     justify-content: start;

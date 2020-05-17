@@ -171,8 +171,8 @@ Vue.component('placar',{
 Vue.component('novo-jogo', {
     template:`
     <div>
-        <button class="btn btn-warning mb-2 " @click="criarJogo" data-toggle="modal" data-target="#exampleModal">Criar Novo Jogo</button>
-        <modal :time-casa="timeCasa" :time-fora="timeFora"></modal>
+        <button class="btn btn-warning mb-2 " @click="criarJogo" data-toggle="modal" data-target="#placarModal">Criar Novo Jogo</button>
+        <placar-modal :time-casa="timeCasa" :time-fora="timeFora" ref="modal"></placar-modal>
     </div>
     `,
     data(){
@@ -191,6 +191,9 @@ Vue.component('novo-jogo', {
 
             this.timeCasa = this.timesColecao[iCasa];
             this.timeFora = this.timesColecao[iFora];
+            let modal = this.$refs.modal;
+            modal.show_modal();
+            // console.log(modal);
             // this.$emit('novo-jogo', {timeCasa, timeFora});
         },
         showTabela(){
@@ -199,7 +202,7 @@ Vue.component('novo-jogo', {
     },
 });
 
-Vue.component('modal',{
+Vue.component('placar-modal',{
     props: ['timeCasa','timeFora'],
     data(){
         return{
@@ -208,40 +211,76 @@ Vue.component('modal',{
         }
     },
     template:`
-    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg"  role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Novo Jogo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="form-inline">
-                    <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
-                    <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
-                    X
-                    <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
-                    <clube :time="timeFora"  v-if="timeFora"></clube>
-                    
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="row col-md-12 mt-5 mb-5">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="fimJogo">Fim de jogo</button>
-                </div>
-            </div>
-            </div>
+    <modal ref="modal">
+        <h3 slot="header">Nova Partida</h3>
+        <form class="form-inline">
+            <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
+            <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
+            X
+            <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
+            <clube :time="timeFora"  v-if="timeFora"></clube>
+                
+        </form>
+        <div slot="footer">
+            <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
         </div>
-    </div>
+    </modal>
     `,
     methods: {
+        show_modal(){
+            this.getModal().show();
+        },
+        close_modal(){
+            this.getModal().close();
+        },
+        getModal(){
+            return this.$refs.modal
+        },
         fimJogo() {
             let golsMarcados = parseInt(this.golsCasa);
             let golSofridos = parseInt(this.golsFora);
             this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
             // this.visao = 'tabela';
+            this.close_modal();
+            this.$emit('fim-jogo');
+        }
+    },
+});
+Vue.component('modal',{
+    template:`
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg"  role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <slot name="header" class="modal-title"></slot>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <slot></slot>
+                </div>
+                <footer class="modal-footer">
+                    <slot name="footer" class="row col-md-12 mt-5 mb-5"></slot>
+                </footer>
+            </div>
+        </div>
+    </div>
+    `,
+    methods: {
+        show(){
+            // console.log();
+            $(this.$el).modal('show');
+        },
+        close(){
+            $(this.$el).modal('hide');
+        },
+        fimJogo() {
+            let golsMarcados = parseInt(this.golsCasa);
+            let golSofridos = parseInt(this.golsFora);
+            this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
+            // this.visao = 'tabela';
+            this.close_modal();
             this.$emit('fim-jogo');
         }
     },
