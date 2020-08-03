@@ -57,6 +57,8 @@ Vue.component('titulo',{
     `
 });
 
+
+
 Vue.component('clubes-rebaixados', {
     props: ['times'],
     template: `
