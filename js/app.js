@@ -15,9 +15,9 @@ Vue.component('my-app', {
         <div class="row">
         </div>
         <div class="row">
-            <div class="col-md-12" v-if="visao!='tabela'">
+            <!-- <div class="col-md-12" v-if="visao!='tabela'">
                 <placar :time-casa="timeCasa"  :time-fora="timeFora" @fim-jogo="showTabela() "></placar>
-            </div>
+            </div> -->
             <div class="col-md-12" v-if="visao=='tabela'">
                 <tabela-brasileiro :times="times"></tabela-brasileiro>
             </div>
@@ -73,14 +73,14 @@ Vue.component('clubes-rebaixados', {
     `,
     computed: {
         timesRebaixados() {
-            return this.$root.times.slice(16, 20)
+            return this.times.slice(16, 20)
         },
     },
 
 });
 
 Vue.component('tabela-brasileiro', {
-    props: ['times'],
+    // props: ['times'],
     inject: ['timesColecao'],
     data(){
         return {
@@ -154,7 +154,7 @@ Vue.component('clubes-libertadores', {
     `,
     computed: {
         timesLibertadores() {
-            return this.$root.times.slice(0, 6)
+            return this.times.slice(0, 6)
         }
     },
 
@@ -168,51 +168,126 @@ Vue.component('placar',{
             golsFora: 0
         }
     },
-    template:`
-    <form class="form-inline">
-        <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
-        <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
-        X
-        <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
-        <clube :time="timeFora"  v-if="timeFora"></clube>
-        <div class="row col-md-12 mt-5 mb-5">
-            <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
-        </div>
-    </form>
-    `,
-    methods: {
-        fimJogo() {
-            let golsMarcados = parseInt(this.golsCasa);
-            let golSofridos = parseInt(this.golsFora);
-            this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
-            // this.visao = 'tabela';
-            this.$emit('fim-jogo');
-        }
-    },
 });
 
 Vue.component('novo-jogo', {
     template:`
     <div>
-        <button class="btn btn-warning mb-2 " @click="criarJogo">Criar Novo Jogo</button>
+        <button class="btn btn-warning mb-2 " @click="criarJogo" data-toggle="modal" data-target="#placarModal">Criar Novo Jogo</button>
+        <placar-modal :time-casa="timeCasa" :time-fora="timeFora" ref="modal"></placar-modal>
     </div>
     `,
-    props:['times'],
+    data(){
+        return {
+            timeCasa: null,
+            timeFora: null,
+            times: this.timesColecao
+        }
+    },
+    // props:['times'],
     inject: ['timesColecao'],
     methods: {
         criarJogo() {
             let iCasa = Math.floor(Math.random() * 20),
                 iFora = Math.floor(Math.random() * 20);
 
-             var timeCasa = this.timesColecao[iCasa];
-             var timeFora = this.timesColecao[iFora];
-            this.$emit('novo-jogo', {timeCasa, timeFora});
+            this.timeCasa = this.timesColecao[iCasa];
+            this.timeFora = this.timesColecao[iFora];
+            let modal = this.$refs.modal;
+            modal.show_modal();
+            // console.log(modal);
+            // this.$emit('novo-jogo', {timeCasa, timeFora});
         },
         showTabela(){
             this.visao = 'tabela'
         }
     },
 });
+
+Vue.component('placar-modal',{
+    props: ['timeCasa','timeFora'],
+    data(){
+        return{
+            golsCasa: 0,
+            golsFora: 0
+        }
+    },
+    template:`
+    <modal ref="modal">
+        <h3 slot="header">Nova Partida</h3>
+        <form class="form-inline">
+            <clube :time=" timeCasa" invertido="true" v-if="timeCasa"></clube>
+            <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsCasa">
+            X
+            <input type="text" class="form-control mr-3 ml-3 mb-5 mt-5" v-model="golsFora">
+            <clube :time="timeFora"  v-if="timeFora"></clube>
+                
+        </form>
+        <div slot="footer">
+            <button type="button" class="btn btn-primary" @click="fimJogo">Fim de jogo</button>
+        </div>
+    </modal>
+    `,
+    methods: {
+        show_modal(){
+            this.getModal().show();
+        },
+        close_modal(){
+            this.getModal().close();
+        },
+        getModal(){
+            return this.$refs.modal
+        },
+        fimJogo() {
+            let golsMarcados = parseInt(this.golsCasa);
+            let golSofridos = parseInt(this.golsFora);
+            this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
+            // this.visao = 'tabela';
+            this.close_modal();
+            this.$emit('fim-jogo');
+        }
+    },
+});
+Vue.component('modal',{
+    template:`
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg"  role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <slot name="header" class="modal-title"></slot>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <slot></slot>
+                </div>
+                <footer class="modal-footer">
+                    <slot name="footer" class="row col-md-12 mt-5 mb-5"></slot>
+                </footer>
+            </div>
+        </div>
+    </div>
+    `,
+    methods: {
+        show(){
+            // console.log();
+            $(this.$el).modal('show');
+        },
+        close(){
+            $(this.$el).modal('hide');
+        },
+        fimJogo() {
+            let golsMarcados = parseInt(this.golsCasa);
+            let golSofridos = parseInt(this.golsFora);
+            this.timeCasa.fimJogo(this.timeFora, golsMarcados, golSofridos);
+            // this.visao = 'tabela';
+            this.close_modal();
+            this.$emit('fim-jogo');
+        }
+    },
+});
+
 Vue.component('clube',{
     props:['time','invertido'],
     template:`
@@ -250,7 +325,7 @@ new Vue({
             ]
         }
     },
-    template:`<my-app></my-app>`,
+    // template:`<my-app></my-app>`,
     data: {
         /* times: [
             new Time('américa MG', 'assets/america_mg_60x60.png'),
