@@ -31,3 +31,17 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .form-inline{
+        justify-content: space-evenly;
+    }
+    .row .time{
+        display: flex;
+        align-items: center;
+    }
+    .row > img{
+        width: 60px;
+        height: 60px;
+    }
+</style>

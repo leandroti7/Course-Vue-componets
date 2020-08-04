@@ -5,13 +5,13 @@
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th v-bind:for="(coluna, indice) in ordem.colunas">
+                    <th v-for="(coluna, indice) in ordem.colunas" :key="indice">
                         <a href="#" @click.prevent="ordenar(indice)">{{ coluna | maiuscula }}</a>
                     </th>
                 </tr>
             </thead>
             <tbody>
-            <tr v-bind:for="(time,indice) in timesFiltrados" v-bind:class="{ 'table-success': indice < 6}" v-bind:style="{ 'font-weight': indice < 6? '900': '400'}">
+            <tr v-for="(time,indice) in timesFiltrados" :key="indice" :class="{ 'table-success': indice < 6}" :style="{ 'font-weight': indice < 6? '900': '400'}">
                 <td>
                     <clube :time='time'></clube>
                 </td>
@@ -64,3 +64,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .row .time{
+        display: flex;
+        align-items: center;
+    }
+    img.img-responsive{
+        width: 60px;
+        height: 60px;
+        margin: 0 10px;
+    }
+    </style>

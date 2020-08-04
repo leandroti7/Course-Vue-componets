@@ -51,5 +51,10 @@ export default {
 </script>
 
 <style>
-
+   .container > .row{
+    flex-direction: column;
+}
+.row > div > button{
+    display: flex;
+}
 </style>

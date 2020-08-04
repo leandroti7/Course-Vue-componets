@@ -1,6 +1,5 @@
 .container{
     width: 100%;
-    /* background: #bcb54a; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,31 +7,22 @@
 }
 .container .row.first{
     width: 100%;
-    /* background: #442265; */
     display: flex;
     justify-content: space-around;
 }
 .container > .first > button{
-    /* margin-left: 5px */
     width: 15%;
 }
 
 
 .container .row.second{
     width: 100%;
-    /* background: #498265; */
     display: flex;
     justify-content: space-around;
 }
-.container > .second > button{
-    /* margin-left: 5px */
-    /* width: 15%; */
-}
-
 
 .container .row.trhird{
     width: 100%;
-    /* background: #498287; */
     display: flex;
     justify-content: center;
 }
