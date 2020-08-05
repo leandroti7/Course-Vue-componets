@@ -4,7 +4,7 @@
     <div class="row">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <novo-jogo :times="times" @novo-jogo="showPlacar"></novo-jogo>
+                <novo-jogo :times="times" id="teste" @novo-jogo="showPlacar"></novo-jogo>
             </div>
         </div>
     </div>
